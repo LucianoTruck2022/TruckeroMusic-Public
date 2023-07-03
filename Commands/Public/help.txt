@@ -1,0 +1,110 @@
+const { ChatInputCommandInteraction, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Component ,EmbedBuilder} = require("discord.js");
+const { Collection } = require("mongoose");
+  
+  module.exports = {
+    data: new SlashCommandBuilder()
+      .setName("help")
+      .setDescription("Obtener ayuda con el bot"),
+    /**
+     *
+     * @param {ChatInputCommandInteraction} interaction
+     * @param {Client} client
+     */
+    async execute(interaction, client) {
+      const { user } = interaction
+      const button = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+        .setCustomId('test')
+        //.setLabel('Menu')
+        .setEmoji('🛡')
+        .setStyle(ButtonStyle.Success),
+      /*new ButtonBuilder()
+        .setCustomId('test2')
+        .setEmoji('🔰')
+        .setStyle(ButtonStyle.Danger),*/
+        new ButtonBuilder()
+        .setCustomId('test3')
+        .setEmoji('🛠')
+        .setStyle(ButtonStyle.Primary)
+      );
+      const embed = new EmbedBuilder()
+      .setTitle('🛡 | Menu de Ayuda')
+      .setColor(client.color)
+      .setFooter({ text: `Solicitado por: ${user.tag}`, iconURL: `${user.displayAvatarURL({ dynamic: true })}` })
+      .setThumbnail(`${client.user.avatarURL({ dynamic: true })}`)
+      .addFields({
+        name: 'Pagina 1',
+        value: `🔰 | Comandos de utilidad **Muy Pronto**`,
+        //inline: true,
+      },
+      {
+        name: 'Pagina 2',
+        value: `🛠 | Comandos de moderacion`,
+        //inline: true,
+      })
+      .setTimestamp()
+      
+      /*const embed2 = new EmbedBuilder()
+      .setTitle('Comandos de utilidad')
+      .setColor(client.color)
+      .setThumbnail(`${client.user.avatarURL({ dynamic: true })}`)
+      .addFields({
+            name: '/user',
+            value: `Te mostrare la informacion sobre un usuario`,
+            inline: true
+        })
+      .setFooter({ text: `Solicitado por: ${user.tag}`, iconURL: `${user.displayAvatarURL({ dynamic: true })}` })
+      .setTimestamp()*/
+      
+      const embed3 = new EmbedBuilder()
+      .setTitle('Comandos de moderacion')
+      .setColor(client.color)
+      .setThumbnail(`${client.user.avatarURL({ dynamic: true })}`)
+      .addFields({
+        name: '/ban',
+        value: `Banear a algun usuario`,
+        inline: true
+      },
+      {
+        name: '/clear',
+        value: `Borra un número especificado de mensajes.`,
+        inline: true
+      },
+      {
+        name: '/kick',
+        value: `Kickeare a un usuario que eligas`,
+        inline: true
+      },
+      {
+        name: '/timeout',
+        value: `Dare timeout a un usuario que eligas`,
+        inline: true
+      })
+      .setFooter({ text: `Solicitado por: ${user.tag}`, iconURL: `${user.displayAvatarURL({ dynamic: true })}` })
+      .setTimestamp()
+
+      await interaction.reply({embeds: [embed], components: [button]})
+
+      const collector = interaction.channel.createMessageComponentCollector();
+      collector.on(`collect`, async (i) => {
+        if(i.customId === 'test') {
+          if(i.user.id !== interaction.user.id) {
+            return await i.reply({content: 'Solo la persona que ejecuto el comando puede utilizar los botones', ephemeral: true})
+          }
+          await i.update({embeds: [embed], components: [button]})
+        }
+        /*if(i.customId === 'test2') {
+          if(i.user.id !== interaction.user.id) {
+            return await i.reply({content: 'Solo la persona que ejecuto el comando puede utilizar los botones', ephemeral: true})
+          }
+          await i.update({embeds: [embed2], components: [button]})
+        }*/
+        if(i.customId === 'test3') {
+          if(i.user.id !== interaction.user.id) {
+            return await i.reply({content: 'Solo la persona que ejecuto el comando puede utilizar los botones', ephemeral: true})
+          }
+          await i.update({embeds: [embed3], components: [button], ephemeral: true})
+        }
+      });
+    },
+  };
