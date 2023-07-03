@@ -1,0 +1,25 @@
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionFlagsBits, PermissionsBitField, } = require("discord.js");
+
+module.exports = {
+  data: { name: `Rojo`, },
+  async execute(interaction, client) {
+    const role3 = interaction.guild.roles.cache.get(``);
+
+    const hrole = interaction.member.roles.cache.has(role3.id);
+
+    if (hrole)
+      return interaction.member.roles.remove(role3).then((member) =>
+        interaction.reply({
+          content: `El rol ${role3} se te ha removido`,
+          ephemeral: true,
+        })
+      );
+
+    return interaction.member.roles.add(role3).then((member) =>
+      interaction.reply({
+        content: `El rol ${role3} te ha sido agregado`,
+        ephemeral: true,
+      })
+    );
+  },
+};

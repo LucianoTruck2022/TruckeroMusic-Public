@@ -1,0 +1,45 @@
+const {
+  EmbedBuilder,
+  Events,
+  AuditLogEvent,
+  MessageType,
+} = require(`discord.js`);
+
+module.exports = {
+  name: "messageDelete",
+  execute(message, interaction, client) {
+    message.guild
+      .fetchAuditLogs({
+        type: AuditLogEvent.MessageDelete,
+      })
+      .then(async (audit) => {
+        const autor = message.author;
+
+        let msg = message.content;
+
+        if (!msg) return;
+
+        if (msg.lenght > 4096)
+          msg = "Este message es demasiado largo para ser mostrado.";
+
+        const channelID = `1098080382009757779`;
+
+        const Channel = await message.guild.channels.cache.get(channelID);
+
+        if (!Channel) return;
+
+        const embed = new EmbedBuilder()
+          .setTitle(`message eliminado:`)
+          .setColor("Red")
+          .setDescription(msg)
+          .addFields({
+            name: `Canal del message`,
+            value: `${message.channel}`,
+          })
+          .addFields({ name: `Autor del message`, value: `${autor}` })
+          .setTimestamp();
+
+        Channel.send({ embeds: [embed] });
+      });
+  },
+};

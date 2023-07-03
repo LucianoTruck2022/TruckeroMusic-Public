@@ -1,0 +1,20 @@
+const { Activity, ActivityType } = require("discord.js");
+const { loadCommands } = require("../../Handlers/commandHandler");
+
+module.exports = {
+  name: "ready",
+  once: true,
+  execute(client) {
+    console.log("El cliente se ha iniciado");
+    client.user.setPresence({
+      activities: [
+        {
+          name: `Soporte Bot`,
+          type: ActivityType.Watching,
+        },
+      ],
+    });
+
+    loadCommands(client);
+  },
+};
