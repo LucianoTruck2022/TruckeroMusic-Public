@@ -1,6 +1,6 @@
 # Truckero Music - Bot Oficial
 
-Unos de los primeros bots que hice, de mi hermano.
+Algunos de mis proyecto creando bot de discord.
 Ya queda publico este proyecto.
 - Versión Discord JS es 14.11.0
 - **Puede funcionar la musica se deja el codigo abierto si puede hacer funcionar**
